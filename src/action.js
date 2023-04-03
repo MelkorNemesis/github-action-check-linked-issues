@@ -88,6 +88,7 @@ async function run() {
       core.debug(`${linkedIssuesComments.length} Comment(s) deleted.`);
     }
   } catch (error) {
+    core.debug(error);
     core.setFailed(error.message);
   } finally {
     core.info(`
