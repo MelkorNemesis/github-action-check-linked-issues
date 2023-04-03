@@ -42,6 +42,8 @@ async function run() {
     const token = core.getInput("github-token");
     const octokit = github.getOctokit(token);
 
+    console.error("Before linked issues");
+
     const data = await getLinkedIssues({
       prNumber: number,
       repoName: name,
@@ -60,6 +62,8 @@ async function run() {
       (node) => `${node.repository.nameWithOwner}#${node.number}`
     );
 
+    console.error("Before pr comments");
+
     const linkedIssuesComments = await getPrComments({
       octokit,
       repoName: name,
@@ -76,6 +80,7 @@ async function run() {
         !linkedIssuesComments.length && core.getInput("comment") && prId;
 
       if (shouldComment) {
+        console.error("Before add comment");
         const body = core.getInput("custom-body-comment");
         await addComment({ octokit, prId, body });
 
@@ -84,11 +89,12 @@ async function run() {
 
       core.setFailed(ERROR_MESSAGE);
     } else if (linkedIssuesComments.length) {
+      console.error("Before delete comments");
       await deleteLinkedIssueComments(octokit, linkedIssuesComments);
       core.debug(`${linkedIssuesComments.length} Comment(s) deleted.`);
     }
   } catch (error) {
-    core.debug(error);
+    console.error("***ERROR***", error);
     core.setFailed(error.message);
   } finally {
     core.info(`
