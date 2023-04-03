@@ -15088,7 +15088,7 @@ async function run() {
       core.debug(`${linkedIssuesComments.length} Comment(s) deleted.`);
     }
   } catch (error) {
-    console.error("***ERROR***", error);
+    console.error("***ERROR***", JSON.stringify(error, null, 2));
     core.setFailed(error.message);
   } finally {
     core.info(`
