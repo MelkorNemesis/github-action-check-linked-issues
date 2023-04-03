@@ -14919,6 +14919,15 @@ function addComment({ octokit, prId, body }) {
   );
 }
 
+function addCommentRest({ octokit, owner, repo, prNumber, body }) {
+  return octokit.request(
+    `POST /repos/${owner}/${repo}/issues/${prNumber}/comments`,
+    {
+      body: `${body} ${addMetadata({ action: "linked_issue" })}`,
+    }
+  );
+}
+
 function getLinkedIssues({ octokit, prNumber, repoOwner, repoName }) {
   return octokit.graphql(
     `
@@ -15076,7 +15085,14 @@ async function run() {
       if (shouldComment) {
         console.error("Before add comment");
         const body = core.getInput("custom-body-comment");
-        await addComment({ octokit, prId, body });
+        // await addComment({ octokit, prId, body });
+        await addCommentRest({
+          octokit,
+          body,
+          owner: owner.login,
+          repo: name,
+          prNumber: number,
+        });
 
         core.debug("Comment added");
       }

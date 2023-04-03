@@ -8,6 +8,7 @@ import {
   addComment,
   deleteLinkedIssueComments,
   getPrComments,
+  addCommentRest,
 } from "./util.js";
 
 const format = (obj) => JSON.stringify(obj, undefined, 2);
@@ -82,7 +83,14 @@ async function run() {
       if (shouldComment) {
         console.error("Before add comment");
         const body = core.getInput("custom-body-comment");
-        await addComment({ octokit, prId, body });
+        // await addComment({ octokit, prId, body });
+        await addCommentRest({
+          octokit,
+          body,
+          owner: owner.login,
+          repo: name,
+          prNumber: number,
+        });
 
         core.debug("Comment added");
       }
