@@ -5,7 +5,6 @@ import * as toolkit from "actions-toolkit";
 import { ERROR_MESSAGE } from "./constants.js";
 import {
   getLinkedIssues,
-  addComment,
   deleteLinkedIssueComments,
   getPrComments,
   addCommentRest,
