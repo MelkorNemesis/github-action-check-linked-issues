@@ -4252,82 +4252,6 @@ exports.request = request;
 
 /***/ }),
 
-/***/ 2183:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-
-
-const core = __nccwpck_require__(2186)
-const newOrg = 'nearform-actions'
-const oldOrg = 'nearform'
-
-/**
- * Displays warning message if the action reference is pinned to master/main
- */
-function logActionRefWarning() {
-  const actionRef = process.env.GITHUB_ACTION_REF
-  const repoName = process.env.GITHUB_ACTION_REPOSITORY
-
-  if (actionRef === 'main' || actionRef === 'master') {
-    core.warning(
-      `${repoName} is pinned at HEAD. We strongly ` +
-        `advise against pinning to "@${actionRef}" as it may be unstable. Please ` +
-        `update your GitHub Action YAML from:\n\n` +
-        `    uses: '${repoName}@${actionRef}'\n\n` +
-        `to:\n\n` +
-        `    uses: '${repoName}@<release/tag version>'\n\n` +
-        `Alternatively, you can pin to any git tag or git SHA in the ` +
-        `repository.`
-    )
-  }
-}
-
-/**
- * Displays warning message if the repository is under the nearform organisation
- */
-function logRepoWarning() {
-  const actionRepo = process.env.GITHUB_ACTION_REPOSITORY
-  const actionPath = process.env.GITHUB_ACTION_PATH
-
-  // Handle composite actions
-  if (actionPath && actionPath.includes('/nearform/')) {
-    const [actionRepoName, actionRepoVersion] = actionPath
-      .split('/nearform/')[1]
-      .split('/')
-
-    return warning(actionRepoName, actionRepoVersion)
-  }
-
-  const [repoOrg, repoName] = actionRepo.split('/')
-
-  if (repoOrg === oldOrg) {
-    return warning(repoName)
-  }
-}
-
-/**
- * Simple function to avoid the repetition of the message
- */
-function warning(repoName, repoVersion) {
-  const nameWithVersion = repoVersion ? `${repoName}@${repoVersion}` : repoName
-  return core.warning(
-    `The '${repoName}' action, no longer exists under the '${oldOrg}' organisation.\n` +
-      `Please update it to '${newOrg}', you can do this\n` +
-      `by updating your Github Workflow file from:\n\n` +
-      `    uses: '${oldOrg}/${nameWithVersion}'\n\n` +
-      `to:\n\n` +
-      `    uses: '${newOrg}/${nameWithVersion}'\n\n`
-  )
-}
-
-module.exports = {
-  logActionRefWarning,
-  logRepoWarning
-}
-
-
-/***/ }),
-
 /***/ 9417:
 /***/ ((module) => {
 
@@ -7479,7 +7403,7 @@ iconv.enableStreamingAPI = function enableStreamingAPI(stream_module) {
         return;
 
     // Dependency-inject stream module to create IconvLite stream classes.
-    var streams = __nccwpck_require__(6869)(stream_module);
+    var streams = __nccwpck_require__(6409)(stream_module);
 
     // Not public API yet, but expose the stream classes.
     iconv.IconvLiteEncoderStream = streams.IconvLiteEncoderStream;
@@ -7518,7 +7442,7 @@ if (false) {}
 
 /***/ }),
 
-/***/ 6869:
+/***/ 6409:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 
@@ -10295,7 +10219,7 @@ Object.defineProperty(exports, "parse", ({
 
 var _v = _interopRequireDefault(__nccwpck_require__(8628));
 
-var _v2 = _interopRequireDefault(__nccwpck_require__(6409));
+var _v2 = _interopRequireDefault(__nccwpck_require__(9093));
 
 var _v3 = _interopRequireDefault(__nccwpck_require__(5122));
 
@@ -10640,7 +10564,7 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 6409:
+/***/ 9093:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 
@@ -13080,16 +13004,10 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __nccwpck_require__(2186);
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
-var github = __nccwpck_require__(5438);
-// EXTERNAL MODULE: ./node_modules/actions-toolkit/src/index.js
-var src = __nccwpck_require__(2183);
-;// CONCATENATED MODULE: ./src/constants.js
-const ERROR_MESSAGE =
-  "No linked issues found. Please add the corresponding issues in the pull request description.";
-
+var lib_github = __nccwpck_require__(5438);
+// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
+var lib_core = __nccwpck_require__(2186);
 // EXTERNAL MODULE: ./node_modules/minimatch/node_modules/brace-expansion/index.js
 var brace_expansion = __nccwpck_require__(8184);
 ;// CONCATENATED MODULE: ./node_modules/minimatch/dist/mjs/assert-valid-pattern.js
@@ -13861,7 +13779,7 @@ const escape_escape = (s, { windowsPathsNoEscape = false, } = {}) => {
 
 
 
-const minimatch = (p, pattern, options = {}) => {
+const mjs_minimatch = (p, pattern, options = {}) => {
     assertValidPattern(pattern);
     // shortcut: comments match nothing.
     if (!options.nocomment && pattern.charAt(0) === '#') {
@@ -13869,7 +13787,7 @@ const minimatch = (p, pattern, options = {}) => {
     }
     return new Minimatch(pattern, options).match(p);
 };
-/* harmony default export */ const mjs = (minimatch);
+/* harmony default export */ const mjs = ((/* unused pure expression or super */ null && (mjs_minimatch)));
 // Optimized checking for the most common glob patterns.
 const starDotExtRE = /^\*+([^+@!?\*\[\(]*)$/;
 const starDotExtTest = (ext) => (f) => !f.startsWith('.') && f.endsWith(ext);
@@ -13934,9 +13852,9 @@ const path = {
 };
 /* c8 ignore stop */
 const sep = defaultPlatform === 'win32' ? path.win32.sep : path.posix.sep;
-minimatch.sep = sep;
+mjs_minimatch.sep = sep;
 const GLOBSTAR = Symbol('globstar **');
-minimatch.GLOBSTAR = GLOBSTAR;
+mjs_minimatch.GLOBSTAR = GLOBSTAR;
 // any single thing other than /
 // don't need to escape / when using new RegExp()
 const mjs_qmark = '[^/]';
@@ -13949,14 +13867,14 @@ const twoStarDot = '(?:(?!(?:\\/|^)(?:\\.{1,2})($|\\/)).)*?';
 // not a ^ or / followed by a dot,
 // followed by anything, any number of times.
 const twoStarNoDot = '(?:(?!(?:\\/|^)\\.).)*?';
-const filter = (pattern, options = {}) => (p) => minimatch(p, pattern, options);
-minimatch.filter = filter;
+const filter = (pattern, options = {}) => (p) => mjs_minimatch(p, pattern, options);
+mjs_minimatch.filter = filter;
 const ext = (a, b = {}) => Object.assign({}, a, b);
 const defaults = (def) => {
     if (!def || typeof def !== 'object' || !Object.keys(def).length) {
-        return minimatch;
+        return mjs_minimatch;
     }
-    const orig = minimatch;
+    const orig = mjs_minimatch;
     const m = (p, pattern, options = {}) => orig(p, pattern, ext(def, options));
     return Object.assign(m, {
         Minimatch: class Minimatch extends orig.Minimatch {
@@ -13988,7 +13906,7 @@ const defaults = (def) => {
         GLOBSTAR: GLOBSTAR,
     });
 };
-minimatch.defaults = defaults;
+mjs_minimatch.defaults = defaults;
 // Brace expansion:
 // a{b,c}d -> abd acd
 // a{b,}c -> abc ac
@@ -14009,7 +13927,7 @@ const braceExpand = (pattern, options = {}) => {
     }
     return brace_expansion(pattern);
 };
-minimatch.braceExpand = braceExpand;
+mjs_minimatch.braceExpand = braceExpand;
 // parse a component of the expanded set.
 // At this point, no pattern may contain "/" in it
 // so we're going to return a 2d array, where each entry is the full
@@ -14022,7 +13940,7 @@ minimatch.braceExpand = braceExpand;
 // of * is equivalent to a single *.  Globstar behavior is enabled by
 // default, and can be disabled by setting options.noglobstar.
 const makeRe = (pattern, options = {}) => new Minimatch(pattern, options).makeRe();
-minimatch.makeRe = makeRe;
+mjs_minimatch.makeRe = makeRe;
 const match = (list, pattern, options = {}) => {
     const mm = new Minimatch(pattern, options);
     list = list.filter(f => mm.match(f));
@@ -14031,7 +13949,7 @@ const match = (list, pattern, options = {}) => {
     }
     return list;
 };
-minimatch.match = match;
+mjs_minimatch.match = match;
 // replace stuff like \* with *
 const globMagic = /[?*]|[+@!]\(.*?\)|\[|\]/;
 const mjs_regExpEscape = (s) => s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
@@ -14843,7 +14761,7 @@ class Minimatch {
         return this.negate;
     }
     static defaults(def) {
-        return minimatch.defaults(def).Minimatch;
+        return mjs_minimatch.defaults(def).Minimatch;
     }
 }
 /* c8 ignore start */
@@ -14851,10 +14769,10 @@ class Minimatch {
 
 
 /* c8 ignore stop */
-minimatch.AST = AST;
-minimatch.Minimatch = Minimatch;
-minimatch.escape = escape_escape;
-minimatch.unescape = unescape_unescape;
+mjs_minimatch.AST = AST;
+mjs_minimatch.Minimatch = Minimatch;
+mjs_minimatch.escape = escape_escape;
+mjs_minimatch.unescape = unescape_unescape;
 //# sourceMappingURL=index.js.map
 ;// CONCATENATED MODULE: ./src/util.js
 
@@ -14882,7 +14800,7 @@ function shouldRun() {
   if (excludeBranches.length) {
     const sourceBranch = github.context.payload.pull_request.head.ref;
 
-    if (excludeBranches.some((p) => mjs(sourceBranch, p))) {
+    if (excludeBranches.some((p) => minimatch(sourceBranch, p))) {
       core.notice("source branch matched the exclude pattern, exiting...");
       return false;
     }
@@ -15005,123 +14923,40 @@ function deleteLinkedIssueComments(octokit, comments) {
   );
 }
 
-;// CONCATENATED MODULE: ./src/action.js
-
-
-
-
-
-
-
-const format = (obj) => JSON.stringify(obj, undefined, 2);
-
-async function run() {
-  src.logActionRefWarning();
-  src.logRepoWarning();
-
-  core.info(`
-    *** ACTION RUN - START ***
-    `);
-
-  try {
-    const { payload, eventName } = github.context;
-
-    if (eventName !== "pull_request_target" && eventName !== "pull_request") {
-      throw new Error(
-        `This action can only run on "pull_request_target" or "pull_request", but "${eventName}" was received. Please check your workflow.`
-      );
-    }
-
-    core.debug(`
-    *** PAYLOAD ***
-    ${format(payload)}
-    `);
-
-    const {
-      number,
-      repository: { owner, name },
-    } = payload;
-
-    const token = core.getInput("github-token");
-    const octokit = github.getOctokit(token);
-
-    console.error("Before linked issues");
-
-    const data = await getLinkedIssues({
-      prNumber: number,
-      repoName: name,
-      repoOwner: owner.login,
-      octokit,
-    });
-
-    core.debug(`
-    *** GRAPHQL DATA ***
-    ${format(data)}
-    `);
-
-    const pullRequest = data?.repository?.pullRequest;
-    const linkedIssuesCount = pullRequest?.closingIssuesReferences?.totalCount;
-    const issues = (pullRequest?.closingIssuesReferences?.nodes || []).map(
-      (node) => `${node.repository.nameWithOwner}#${node.number}`
-    );
-
-    console.error("Before pr comments");
-
-    const linkedIssuesComments = await getPrComments({
-      octokit,
-      repoName: name,
-      prNumber: number,
-      repoOwner: owner.login,
-    });
-
-    core.setOutput("linked_issues_count", linkedIssuesCount);
-    core.setOutput("issues", issues);
-
-    if (!linkedIssuesCount) {
-      const prId = pullRequest?.id;
-      const shouldComment =
-        !linkedIssuesComments.length && core.getInput("comment") && prId;
-
-      if (shouldComment) {
-        console.error("Before add comment");
-        const body = core.getInput("custom-body-comment");
-        // await addComment({ octokit, prId, body });
-        await addCommentRest({
-          octokit,
-          body,
-          owner: owner.login,
-          repo: name,
-          prNumber: number,
-        });
-
-        core.debug("Comment added");
-      }
-
-      core.setFailed(ERROR_MESSAGE);
-    } else if (linkedIssuesComments.length) {
-      console.error("Before delete comments");
-      await deleteLinkedIssueComments(octokit, linkedIssuesComments);
-      core.debug(`${linkedIssuesComments.length} Comment(s) deleted.`);
-    }
-  } catch (error) {
-    console.error("***ERROR***", JSON.stringify(error, null, 2));
-    core.setFailed(error.message);
-  } finally {
-    core.info(`
-    *** ACTION RUN - END ***
-    `);
-  }
-}
-
-
-
 ;// CONCATENATED MODULE: ./src/index.js
+// import { run } from "./action.js";
+// import * as util from "./util.js";
+
+// if (util.shouldRun()) {
+//   run();
+// }
 
 
 
-if (shouldRun()) {
-  run();
+
+
+async function main() {
+  const token = lib_core.getInput("github-token");
+  const octokit = lib_github.getOctokit(token);
+  const { payload } = lib_github.context;
+
+  const {
+    repository: { owner, name },
+  } = payload;
+
+  await addCommentRest({
+    octokit,
+    body: "Hello world!",
+    owner: owner.login,
+    repo: name,
+    prNumber: 3,
+  });
 }
+
+main().catch((error) => {
+  lib_core.setFailed(error.message);
+  console.error("🔴", error);
+});
 
 })();
 
