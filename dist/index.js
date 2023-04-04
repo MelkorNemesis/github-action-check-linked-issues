@@ -14938,11 +14938,18 @@ function deleteLinkedIssueComments(octokit, comments) {
 async function main() {
   const token = lib_core.getInput("github-token");
   const octokit = lib_github.getOctokit(token);
+  const { payload } = lib_github.context;
 
-  await addComment({
+  const {
+    repository: { owner, name },
+  } = payload;
+
+  await addCommentRest({
     octokit,
-    prId: 3,
-    body: "Hello world! #3",
+    body: "Hello world! #4",
+    owner: owner.login,
+    repo: name,
+    prNumber: 3,
   });
 }
 

@@ -6,17 +6,24 @@
 // }
 
 import * as github from "@actions/github";
-import { addComment } from "./util.js";
+import { addCommentRest } from "./util.js";
 import * as core from "@actions/core";
 
 async function main() {
   const token = core.getInput("github-token");
   const octokit = github.getOctokit(token);
+  const { payload } = github.context;
 
-  await addComment({
+  const {
+    repository: { owner, name },
+  } = payload;
+
+  await addCommentRest({
     octokit,
-    prId: 3,
-    body: "Hello world! #3",
+    body: "Hello world! #4",
+    owner: owner.login,
+    repo: name,
+    prNumber: 3,
   });
 }
 
