@@ -61,12 +61,12 @@ export function addComment({ octokit, prId, body }) {
 }
 
 export function addCommentRest({ octokit, owner, repo, prNumber, body }) {
-  return octokit.request(
-    `POST /repos/${owner}/${repo}/issues/${prNumber}/comments`,
-    {
-      body: `${body} ${addMetadata({ action: "linked_issue" })}`,
-    }
-  );
+  return octokit.rest.issues.createComment({
+    owner: owner,
+    repo: repo,
+    issue_number: prNumber,
+    body: `${body} ${addMetadata({ action: "linked_issue" })}`,
+  });
 }
 
 export function getLinkedIssues({ octokit, prNumber, repoOwner, repoName }) {

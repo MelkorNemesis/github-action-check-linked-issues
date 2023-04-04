@@ -14838,12 +14838,12 @@ function addComment({ octokit, prId, body }) {
 }
 
 function addCommentRest({ octokit, owner, repo, prNumber, body }) {
-  return octokit.request(
-    `POST /repos/${owner}/${repo}/issues/${prNumber}/comments`,
-    {
-      body: `${body} ${addMetadata({ action: "linked_issue" })}`,
-    }
-  );
+  return octokit.rest.issues.createComment({
+    owner: owner,
+    repo: repo,
+    issue_number: prNumber,
+    body: `${body} ${addMetadata({ action: "linked_issue" })}`,
+  });
 }
 
 function getLinkedIssues({ octokit, prNumber, repoOwner, repoName }) {
@@ -14946,7 +14946,7 @@ async function main() {
 
   await addCommentRest({
     octokit,
-    body: "Hello world!",
+    body: "Hello world! #2",
     owner: owner.login,
     repo: name,
     prNumber: 3,

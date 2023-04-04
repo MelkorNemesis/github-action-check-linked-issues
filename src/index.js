@@ -20,7 +20,7 @@ async function main() {
 
   await addCommentRest({
     octokit,
-    body: "Hello world!",
+    body: "Hello world! #2",
     owner: owner.login,
     repo: name,
     prNumber: 3,
