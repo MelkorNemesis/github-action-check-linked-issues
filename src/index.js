@@ -14,13 +14,16 @@ async function main() {
   const octokit = github.getOctokit(token);
   const { payload } = github.context;
 
+  console.log("🐞", JSON.stringify({ githubContext: github.context }, null, 2));
+  console.log("🐞", JSON.stringify({ payload }, null, 2));
+
   const {
     repository: { owner, name },
   } = payload;
 
   await addCommentRest({
     octokit,
-    body: "Hello world! #4",
+    body: "Hello world! #5",
     owner: owner.login,
     repo: name,
     prNumber: 3,
